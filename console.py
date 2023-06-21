@@ -121,7 +121,27 @@ class HBNBCommand(cmd.Cmd):
         elif args not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
+        
         new_instance = HBNBCommand.classes[args]()
+        
+        if len(args) > 1:
+            for x in args[1:]:
+                try:
+                    key, value = x.split('=')
+                    value = value.replace('_', ' ')
+
+                    """handle string case."""
+                    if value[0] == '\"' and value[-1] == '\"':
+                        value = value[1:-1]
+                    elif '.' in value:
+                        value = float(value)
+                    else:
+                        value = int(value)
+
+                    setattr(new_instance, key, value)
+                except:
+                    pass
+
         storage.save()
         print(new_instance.id)
         storage.save()
